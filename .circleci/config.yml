@@ -4,8 +4,13 @@ version: 2.1
 commands:
   print_pipeline_id:
   description: "prints the Circle CI Workflow ID from its environment variable " 
-  steps:
-    - run: echo ${CIRCLE_WORKFLOW_ID}
+  parameters:
+    id: 
+      type: string 
+  steps:  
+    - run: 
+      - echo ${CIRCLE_WORKFLOW_ID}
+      - echo << parameters.id >> #need to pass workflow id into command as a parameter.
 jobs:
   save_hello_world_output:
     docker:
@@ -24,6 +29,8 @@ jobs:
           at: ~/
      - run: cat ~/output.txt
      - print_pipeline_id
+     - print_pipeline_id:
+       id: << pipeline.id >>
 workflows:
   # Name the workflow "welcome"
   welcome:
